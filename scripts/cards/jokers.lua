@@ -47,12 +47,25 @@ SMODS.Joker{
 }
 
 -- Edward Robinson Jr.
+function AcesCount()
+    local ace_count = 0;
+    
+    if not G.deck then return 0 end
+    for i, _card in ipairs(G.deck.cards) do
+        if _card:get_id() == 14 then ace_count = ace_count + 1; end
+    end
+
+    return ace_count or 0;
+end
+
 SMODS.Joker{
     key = "junior",
     loc_txt = {
         name = "Edward Robinson Jr.",
         text = {
-            "{C:inactive}Placeholder description{}"
+            "At end of round, gain {C:gold}$1{}",
+            "for every {C:attention}Ace{} in full deck",
+            "{C:inactive}(currently {C:gold}$#1#{C:inactive}){}"
         }
     },
 
@@ -65,6 +78,22 @@ SMODS.Joker{
 
     calculate = function(self, card, context)
         -- todo
+        -- if context.main_eval and context.end_of_round then
+        -- end
+    end,
+
+    loc_vars = function(self, info_queue, car)
+        return {
+            vars = {
+                AcesCount()
+            }
+        };
+    end,
+
+    calc_dollar_bonus = function(self, card)
+        local ace_count = AcesCount();
+
+        return ace_count or 0;
     end,
 
     in_pool = function(self, a, b)
@@ -420,7 +449,7 @@ SMODS.Joker{
 
                 card.ability.extra.Xmult = card.ability.extra.Xmult + (scrabble_value / 10);
                 card:juice_up();
-                
+
                 return {
                     message = letter:upper() .. "!"
                 };

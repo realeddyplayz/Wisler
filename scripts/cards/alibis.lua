@@ -457,7 +457,9 @@ SMODS.Joker {
     loc_txt = {
         name = "Movie of the Year",
         text = {
-            "{C:inactive}Placeholder description"
+            "Applies {X:mult,C:white}X1.5{} Mult for every",
+            "{C:attention}unscored Ace{} in played hands",
+            "if {C:attention}Edward Robinson{} is present"
         }
     },
 
@@ -474,6 +476,12 @@ SMODS.Joker {
     
     calculate = function(self, card, context)
         -- todo
+        if not next(SMODS.find_card("j_eddy_edward")) then return end
+        if context.individual and context.cardarea == 'unscored' then
+            if context.other_card:get_id() == 14 then
+                return { Xmult = 1.5 };
+            end
+        end
     end,
 
     atlas = "Alibis",
