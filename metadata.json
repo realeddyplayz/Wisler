@@ -1,0 +1,16 @@
+{
+	"id": "WISLER",
+	"name": "Wisler",
+	"display_name": "Wisler",
+	"author": ["realeddyplayz"],
+	"description": "\"Edward Robinson? BAHAHAHA!\"",
+	"prefix": "eddy",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "EB1C1C",
+	"badge_text_colour": "FFFFFF",
+	"version": "0.1.0",
+	"dependencies": [
+        "Steamodded (>=1.*)"
+    ]
+}
