@@ -654,3 +654,110 @@ SMODS.Joker{
         return true; -- TODO: introduce way to get it
     end
 }
+
+SMODS.Joker{
+    key = "maurice",
+    loc_txt = {
+        name = "maurice",
+        text = {
+            "{C:chips}+#1#{} Chips",
+            "{C:green,E:1}#2# in #3#{} chance to become",
+            "{C:attention}Gilgamesh the Consumer of Reality{}",
+            "at end of round"
+        }
+    },
+
+    atlas = "Bilmop",
+    pos = {x = 2, y = 0},
+    cost = 1,
+
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+
+    config = {
+        extra = {
+            chips = 1,
+            numerator = 1,
+            denominator = 5
+        }
+    },
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return { chips = card.ability.extra.chips };
+        end
+
+        if context.end_of_round and context.main_eval then
+            local evolution = SMODS.pseudorandom_probability(card, "maurice", card.ability.extra.numerator, card.ability.extra.denominator, "maurice");
+        
+            if evolution then 
+                G.jokers:remove_card(card);
+                card:remove();
+                G.E_MANAGER:add_event(Event({
+                    trigger = "after",
+                    delay = 0.1,
+                    func = function()
+                        SMODS.add_card({ key = "j_eddy_gilgamesh" });
+                        return true;
+                    end
+                }));
+            end
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.chips,
+                card.ability.extra.numerator,
+                card.ability.extra.denominator
+            }
+        };
+    end,
+
+    in_pool = function(self, a, b)
+        return true; -- TODO: introduce way to get it
+    end
+}
+
+SMODS.Joker{
+    key = "gilgamesh",
+    loc_txt = {
+        name = "Gilgamesh the Consumer of Reality",
+        text = {
+            "{C:chips}+#1#{} Chips"
+        }
+    },
+
+    atlas = "Bilmop",
+    pos = {x = 3, y = 0},
+    soul_pos = {x = 3, y = 1},
+    cost = 1,
+
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+
+    config = {
+        extra = {
+            chips = 2
+        }
+    },
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return { chips = card.ability.extra.chips };
+        end
+    end,
+
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.chips
+            }
+        };
+    end,
+
+    in_pool = function(self, a, b)
+        return false; -- TODO: introduce way to get it
+    end
+}
